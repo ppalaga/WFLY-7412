@@ -8,6 +8,10 @@
   <artifactId>jboss-servlet-security-WFLY-7412-war</artifactId>
   <packaging>war</packaging>
 
+  <properties>
+    <jbossRun>${project.build.directory}/wildfly-run</jbossRun>
+    <jbossHome>${jbossRun}/wildfly-${version.org.wildfly}</jbossHome>
+  </properties>
 
   <dependencies>
 
@@ -47,6 +51,13 @@
       <version>3.5.0</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+      <artifactId>jboss-servlet-security-WFLY-7412-login-module-1</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
 
@@ -54,11 +65,83 @@
     <!-- Set the name of the WAR, used as the context root when the app is deployed -->
     <finalName>${project.artifactId}</finalName>
     <plugins>
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-dependency-plugin</artifactId>
+         <version>2.10</version>
+         <executions>
+           <execution>
+             <id>unpack</id>
+             <phase>pre-integration-test</phase>
+             <goals>
+               <goal>unpack</goal>
+             </goals>
+             <configuration>
+               <artifactItems>
+                 <artifactItem>
+                   <groupId>org.wildfly</groupId>
+                   <artifactId>wildfly-dist</artifactId>
+                   <version>${version.org.wildfly}</version>
+                   <type>zip</type>
+                   <overWrite>false</overWrite>
+                   <outputDirectory>${jbossRun}</outputDirectory>
+                 </artifactItem>
+               </artifactItems>
+             </configuration>
+           </execution>
+           <execution>
+             <id>copy</id>
+             <phase>pre-integration-test</phase>
+             <goals>
+               <goal>copy</goal>
+             </goals>
+             <configuration>
+               <artifactItems>
+                 <artifactItem>
+                   <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+                   <artifactId>jboss-servlet-security-WFLY-7412-login-module-1</artifactId>
+                   <version>${project.version}</version>
+                   <type>jar</type>
+                   <outputDirectory>${jbossHome}/modules/system/layers/base/org/jboss/as/quickstarts/login/module1/main</outputDirectory>
+                 </artifactItem>
+               </artifactItems>
+             </configuration>
+           </execution>
+         </executions>
+       </plugin>
+
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${jbossHome}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/test/wildfly-resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- WildFly plug-in to deploy the WAR -->
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
         <version>${version.wildfly.maven.plugin}</version>
+        <configuration>
+          <jbossHome>${jbossHome}</jbossHome>
+        </configuration>
         <executions>
           <execution>
             <id>configure-wf</id>
@@ -69,16 +152,25 @@
             </goals>
             <phase>pre-integration-test</phase>
             <configuration>
-              <artifact>org.wildfly:wildfly-dist:${version.org.wildfly}:zip</artifact>
               <!-- <serverConfig>standalone-elytron.xml</serverConfig> -->
               <commands>
+                <command>/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level,value=TRACE)</command>
+                <command>/subsystem=logging/logger=org.jboss.as.security:add</command>
+                <command>/subsystem=logging/logger=org.jboss.as.security:write-attribute(name=level,value=TRACE)</command>
 
                 <command>/subsystem=datasources/data-source=ServletSecurityDS:add(connection-url="jdbc:h2:mem:servlet-security;DB_CLOSE_ON_EXIT=FALSE", jndi-name="java:jboss/datasources/ServletSecurityDS", driver-name=h2, user-name="sa", password="sa")</command>
+
                 <command>/subsystem=security/security-domain=servlet-security-quickstart/:add(cache-type=default)</command>
                 <command>/subsystem=security/security-domain=servlet-security-quickstart/authentication=classic:add(login-modules=[
-                      {"code"=>"Database", "flag"=>"required", "module-options"=>[("dsJndiName"=>"java:jboss/datasources/ServletSecurityDS"),("principalsQuery"=>"SELECT PASSWORD FROM USERS WHERE USERNAME = ?"), ("rolesQuery"=>"SELECT R.NAME, 'Roles' FROM USERS_ROLES UR INNER JOIN ROLES R ON R.ID = UR.ROLE_ID INNER JOIN USERS U ON U.ID = UR.USER_ID WHERE U.USERNAME = ?")]}
+                      {
+                        "code"=>"org.jboss.as.quickstarts.login.module1.LoginModule1",
+                        "module"=>"org.jboss.as.quickstarts.login.module1",
+                        "flag"=>"required",
+                        "module-options"=>[
+                            ("usersProperties"=>"user.properties"),
+                            ("rolesProperties"=>"roles.properties")]
+                        }
                   ])</command>
-
               </commands>
             </configuration>
           </execution>
@@ -90,7 +182,6 @@
             </goals>
             <phase>pre-integration-test</phase>
             <configuration>
-              <jbossHome>${basedir}/target/wildfly-run/wildfly-${version.org.wildfly}</jbossHome>
               <filename>${project.build.finalName}.war</filename>
             </configuration>
           </execution>

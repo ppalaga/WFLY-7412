@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+    <artifactId>jboss-servlet-security-WFLY-7412</artifactId>
+    <version>7.1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>jboss-servlet-security-WFLY-7412-login-module-1</artifactId>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.picketbox</groupId>
+      <artifactId>picketbox</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+</project>
