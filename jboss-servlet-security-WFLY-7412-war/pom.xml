@@ -168,6 +168,8 @@
               <!-- <serverConfig>standalone-elytron.xml</serverConfig> -->
               <commands>
                 <command>/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level,value=TRACE)</command>
+                <command>/subsystem=logging/logger=org.jboss.security:add</command>
+                <command>/subsystem=logging/logger=org.jboss.security:write-attribute(name=level,value=TRACE)</command>
                 <command>/subsystem=logging/logger=org.jboss.as.security:add</command>
                 <command>/subsystem=logging/logger=org.jboss.as.security:write-attribute(name=level,value=TRACE)</command>
 
