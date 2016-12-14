@@ -1,0 +1,24 @@
+= A test for link:https://issues.jboss.org/browse/WFLY-7412[WFLY-7412] and link:https://issues.jboss.org/browse/SECURITY-930[SECURITY-930]
+
+Based on Servlet Security Quickstart https://github.com/jboss-developer/jboss-eap-quickstarts/commit/afa65ad0f5d54fa35d075689d54a99af06033f17
+
+== How to run
+
+[source,shell]
+----
+./mvnw clean install
+----
+
+The integration tests in `SecuredServletITest` should pass.
+
+To demonstrate the issue before it was fixed in PicketBox and WildFly,
+
+[source,shell]
+----
+./mvnw clean install -Dversion.org.wildfly=10.1.0.Final
+...
+DEBUG [org.jboss.security] (default task-4) PBOX00206: Login failure: javax.security.auth.login.LoginException: unable to find LoginModule class: org.jboss.as.quickstarts.login.module1.LoginModule1 from [Module "deployment.jboss-servlet-security-WFLY-7412-war.war:main" from Service Module Loader]
+...
+----
+
+
