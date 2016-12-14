@@ -144,11 +144,11 @@
         </configuration>
         <executions>
           <execution>
-            <id>configure-wf</id>
+            <id>start-wf</id>
             <goals>
               <goal>start</goal>
               <goal>execute-commands</goal>
-              <goal>shutdown</goal>
+              <goal>deploy</goal>
             </goals>
             <phase>pre-integration-test</phase>
             <configuration>
@@ -171,17 +171,8 @@
                             ("rolesProperties"=>"roles.properties")]
                         }
                   ])</command>
+                  <command>reload</command>
               </commands>
-            </configuration>
-          </execution>
-          <execution>
-            <id>start-wf</id>
-            <goals>
-              <goal>start</goal>
-              <goal>deploy</goal>
-            </goals>
-            <phase>pre-integration-test</phase>
-            <configuration>
               <filename>${project.build.finalName}.war</filename>
             </configuration>
           </execution>
