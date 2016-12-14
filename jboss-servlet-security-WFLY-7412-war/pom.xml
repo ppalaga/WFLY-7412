@@ -161,7 +161,7 @@
             <goals>
               <goal>start</goal>
               <goal>execute-commands</goal>
-              <goal>shutdown</goal>
+              <goal>shutdown</goal><!-- we shut down and start later again because reload CLI op does not work for this version of WF plugin and the used WF version -->
             </goals>
             <phase>pre-integration-test</phase>
             <configuration>
@@ -172,8 +172,6 @@
                 <command>/subsystem=logging/logger=org.jboss.security:write-attribute(name=level,value=TRACE)</command>
                 <command>/subsystem=logging/logger=org.jboss.as.security:add</command>
                 <command>/subsystem=logging/logger=org.jboss.as.security:write-attribute(name=level,value=TRACE)</command>
-
-                <command>/subsystem=datasources/data-source=ServletSecurityDS:add(connection-url="jdbc:h2:mem:servlet-security;DB_CLOSE_ON_EXIT=FALSE", jndi-name="java:jboss/datasources/ServletSecurityDS", driver-name=h2, user-name="sa", password="sa")</command>
 
                 <command>/subsystem=security/security-domain=servlet-security-quickstart/:add(cache-type=default)</command>
                 <command>/subsystem=security/security-domain=servlet-security-quickstart/authentication=classic:add(login-modules=[
