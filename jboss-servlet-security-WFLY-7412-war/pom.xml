@@ -58,6 +58,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+      <artifactId>jboss-servlet-security-WFLY-7412-login-module-2</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
 
@@ -103,6 +109,13 @@
                    <version>${project.version}</version>
                    <type>jar</type>
                    <outputDirectory>${jbossHome}/modules/system/layers/base/org/jboss/as/quickstarts/login/module1/main</outputDirectory>
+                 </artifactItem>
+                 <artifactItem>
+                   <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+                   <artifactId>jboss-servlet-security-WFLY-7412-login-module-2</artifactId>
+                   <version>${project.version}</version>
+                   <type>jar</type>
+                   <outputDirectory>${jbossHome}/modules/system/layers/base/org/jboss/as/quickstarts/login/module2/main</outputDirectory>
                  </artifactItem>
                </artifactItems>
              </configuration>
@@ -165,11 +178,13 @@
                       {
                         "code"=>"org.jboss.as.quickstarts.login.module1.LoginModule1",
                         "module"=>"org.jboss.as.quickstarts.login.module1",
-                        "flag"=>"required",
-                        "module-options"=>[
-                            ("usersProperties"=>"user.properties"),
-                            ("rolesProperties"=>"roles.properties")]
-                        }
+                        "flag"=>"sufficient"
+                      },
+                      {
+                        "code"=>"org.jboss.as.quickstarts.login.module2.LoginModule2",
+                        "module"=>"org.jboss.as.quickstarts.login.module2",
+                        "flag"=>"sufficient"
+                      }
                   ])</command>
               </commands>
             </configuration>

@@ -1,0 +1,12 @@
+<module xmlns="urn:jboss:module:1.5" name="org.jboss.as.quickstarts.login.module2">
+
+    <resources>
+        <resource-root path="jboss-servlet-security-WFLY-7412-login-module-2-${project.version}.jar"/>
+    </resources>
+
+    <dependencies>
+      <module name="org.picketbox" />
+      <module name="javax.api"/>
+      <module name="org.jboss.logging" />
+    </dependencies>
+</module>

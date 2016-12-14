@@ -1,4 +1,4 @@
-package org.jboss.as.quickstarts.login.module1;
+package org.jboss.as.quickstarts.login.module2;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,9 +9,8 @@ import javax.security.auth.login.LoginException;
 import org.jboss.logging.Logger;
 import org.jboss.security.auth.spi.UsersRolesLoginModule;
 
-public class LoginModule1 extends UsersRolesLoginModule {
-
-    private static final Logger log = Logger.getLogger(LoginModule1.class);
+public class LoginModule2 extends UsersRolesLoginModule {
+    private static final Logger log = Logger.getLogger(LoginModule2.class);
 
     @Override
     public boolean login() throws LoginException {
@@ -23,19 +22,17 @@ public class LoginModule1 extends UsersRolesLoginModule {
     @Override
     protected Properties createRoles(Map<String, ?> options) throws IOException {
         Properties result = new Properties();
-        result.put("quickstartUser1", "quickstarts");
-        result.put("guest1", "guest");
+        result.put("quickstartUser2", "quickstarts");
+        result.put("guest2", "guest");
         return result;
     }
 
     @Override
     protected Properties createUsers(Map<String, ?> options) throws IOException {
         Properties result = new Properties();
-        result.put("quickstartUser1", "quickstartPwd1!");
-        result.put("guest1", "guestPwd1!");
+        result.put("quickstartUser2", "quickstartPwd2!");
+        result.put("guest2", "guestPwd2!");
         return result;
     }
-
-
 
 }

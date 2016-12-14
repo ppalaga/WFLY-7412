@@ -58,6 +58,7 @@
   <modules>
     <module>jboss-servlet-security-WFLY-7412-war</module>
     <module>jboss-servlet-security-WFLY-7412-login-module-1</module>
+    <module>jboss-servlet-security-WFLY-7412-login-module-2</module>
   </modules>
 
   <dependencyManagement>
@@ -92,6 +93,12 @@
       <dependency>
         <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
         <artifactId>jboss-servlet-security-WFLY-7412-login-module-1</artifactId>
+        <version>7.1.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.quickstarts.eap.WFLY-7412</groupId>
+        <artifactId>jboss-servlet-security-WFLY-7412-login-module-2</artifactId>
         <version>7.1.0-SNAPSHOT</version>
       </dependency>
 
